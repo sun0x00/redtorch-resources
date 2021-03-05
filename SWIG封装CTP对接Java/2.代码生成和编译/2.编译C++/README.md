@@ -26,7 +26,7 @@
 >编译略有区别，但函数定义一致,因此通过SWIG生成的C++代码跨平台，无需修改
 
 ## 结算单乱码的解决方案
-结算单乱码的主要原因是分段按byte截断传输，不考虑unicode可能多个byte的情况，因此中途转码会丢失数据，一个简单的解决方案，在Java中还原为byte[] 拼接，然后再new String ，使用编码GB2312,此问题便解决
+结算单乱码的主要原因是分段按byte截断传输，不考虑unicode可能多个byte的情况，因此中途转码会丢失数据，一个简单的解决方案，在Java中还原为byte[] 拼接，然后再new String ，使用编码GB18030(兼容GBK,GB2312),此问题便解决
 
 在生成的CPP中搜索 `CThostFtdcSettlementInfoField_1Content_1get`
 将返回类型改为`jbyteArray `
@@ -77,5 +77,5 @@
 
 手动将`CThostFtdcSettlementInfoField.java`文件中的函数 `getContent()`方法的返回类型改为`byte[]`,将其调用的其他类的方法的返回类型也改为`byte[]`直到无错为止
 
-在java中，在没有返回last标记之前，存储所有`byte[]`,返回标记之后拼接为一个大`byte[] `使用`new String(contentBytes,"GBK")`，便可得到完全正确的结算单
+在java中，在没有返回last标记之前，存储所有`byte[]`,返回标记之后拼接为一个大`byte[] `使用`new String(contentBytes,"GB18030")`，便可得到完全正确的结算单
 
